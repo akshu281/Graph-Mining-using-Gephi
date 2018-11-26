@@ -1,0 +1,9 @@
+#query for aggregation 
+db.mycol.aggregate([{$group:{_id:{"org":"$ORIGIN_PT_CODE","dst":"$DESTINATION_PT_CODE",day:"$DAY_TYPE"},total:{$sum:"$TOTAL_TRIPS"}}},{$project:{org:"$_id.org",dst:"$_id.dst",day:"$_id.day",total:"$total"}},{$out:"final_results"}],{allowDiskUse:true})
+
+
+#exporting the data to csv file
+mongoexport --db newdb --collection final_results --type csv --out "E:/STUDIES/output.csv" --fields "org,dst,day,total"
+
+#importing the data to csv file
+mongoimport --db newdb --collection mycol E:\STUDIES\Sem_2\WA\GraphCA\origin_destination_bus_201809.csv --headerline --csv
